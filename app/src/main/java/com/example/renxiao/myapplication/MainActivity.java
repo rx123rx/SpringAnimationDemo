@@ -6,7 +6,6 @@ import android.support.animation.DynamicAnimation;
 import android.support.animation.SpringAnimation;
 import android.support.animation.SpringForce;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -18,8 +17,8 @@ import android.widget.RelativeLayout;
 public class MainActivity extends AppCompatActivity {
     float scaleFactor = 1f;
     private RelativeLayout rootLayout;
-    private int _xDelta;
-    private int _yDelta;
+    private int xDelta;
+    private int yDelta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +46,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         img.setOnTouchListener((view, event) -> {
-            final int X = (int) event.getRawX();
-            final int Y = (int) event.getRawY();
+            final int rawX = (int) event.getRawX();
+            final int rawY = (int) event.getRawY();
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
                     RelativeLayout.LayoutParams layoutParam = (RelativeLayout.LayoutParams) view.getLayoutParams();
-                    _xDelta = X - layoutParam.leftMargin;
-                    _yDelta = Y - layoutParam.topMargin;
+                    xDelta = rawX - layoutParam.leftMargin;
+                    yDelta = rawY - layoutParam.topMargin;
                     break;
                 case MotionEvent.ACTION_UP:
                     springAnim.start();
@@ -66,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
                 case MotionEvent.ACTION_MOVE:
                     springAnim.cancel();
                     RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-                    layoutParams.leftMargin = X - _xDelta;
-                    layoutParams.topMargin = Y - _yDelta;
+                    layoutParams.leftMargin = rawX - xDelta;
+                    layoutParams.topMargin = rawY - yDelta;
                     view.setLayoutParams(layoutParams);
                     springAnim.setStartValue(img.getTop());
                     break;
